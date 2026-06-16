@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0f0f0f;
+  color: #f0ede8;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #1a1a2e; }
+::-webkit-scrollbar-thumb { background: #c9a84c; border-radius: 3px; }
+
+.shimmer {
+  background: linear-gradient(90deg, #1a1a2e 25%, #2a2a4e 50%, #1a1a2e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
