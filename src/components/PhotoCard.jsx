@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 
 export default function PhotoCard({ photo, onClick }) {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
+ const [loaded, setLoaded] = useState(false);
+const [error, setError] = useState(false);
 
-  const src = `${process.env.PUBLIC_URL}/photos/${photo.file}`;
-  const isVideo = photo.file?.endsWith(".mp4");
+const isVideo = photo.type === "video";
+
+const src = isVideo
+  ? `${process.env.PUBLIC_URL}/videos/${photo.file}`
+  : `${process.env.PUBLIC_URL}/photos/${photo.file}`;
 
   const handleDownload = (e) => {
     e.stopPropagation();

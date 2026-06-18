@@ -4,12 +4,11 @@ const videos = Array.from({ length: TOTAL_VIDEOS }, (_, i) => {
   const id = i + 1;
 
   return {
-    id,
+    id: `v${id}`, // important: avoid conflict with photo ids
     file: `${id}.mp4`,
+    type: "video",
     title: `Video ${id}`,
-    category: id % 2 === 0 ? "Clips" : "Moments",
-    date: "",
-    description: "",
+    category: "video",
   };
 });
 

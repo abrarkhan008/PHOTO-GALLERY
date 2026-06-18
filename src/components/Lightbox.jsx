@@ -1,7 +1,12 @@
 import React, { useEffect, useCallback } from "react";
 
 export default function Lightbox({ photo, photos, onClose, onNext, onPrev }) {
-  const src = `${process.env.PUBLIC_URL}/photos/${photo.file}`;
+  const isVideo = photo.type === "video";
+
+  const src = isVideo
+    ? `${process.env.PUBLIC_URL}/videos/${photo.file}`
+    : `${process.env.PUBLIC_URL}/photos/${photo.file}`;
+
   const currentIndex = photos.findIndex((p) => p.id === photo.id);
 
   const handleDownload = () => {
@@ -11,11 +16,14 @@ export default function Lightbox({ photo, photos, onClose, onNext, onPrev }) {
     link.click();
   };
 
-  const handleKey = useCallback((e) => {
-    if (e.key === "Escape") onClose();
-    if (e.key === "ArrowRight") onNext();
-    if (e.key === "ArrowLeft") onPrev();
-  }, [onClose, onNext, onPrev]);
+  const handleKey = useCallback(
+    (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") onNext();
+      if (e.key === "ArrowLeft") onPrev();
+    },
+    [onClose, onNext, onPrev],
+  );
 
   useEffect(() => {
     document.addEventListener("keydown", handleKey);
@@ -37,16 +45,27 @@ export default function Lightbox({ photo, photos, onClose, onNext, onPrev }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div>
-          <p className="text-gold text-xs tracking-widest uppercase font-semibold">{photo.category}</p>
-          <h2 className="font-display text-xl text-soft-white font-semibold mt-0.5">{photo.title}</h2>
+          <p className="text-gold text-xs tracking-widest uppercase font-semibold">
+            {photo.category}
+          </p>
+          <h2 className="font-display text-xl text-soft-white font-semibold mt-0.5">
+            {photo.title}
+          </h2>
           {photo.date && (
             <p className="text-white/40 text-xs mt-0.5">
-              {new Date(photo.date).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+              {new Date(photo.date).toLocaleDateString("en-IN", {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
             </p>
           )}
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-white/30 text-sm">{currentIndex + 1} / {photos.length}</span>
+          <span className="text-white/30 text-sm">
+            {currentIndex + 1} / {photos.length}
+          </span>
           <button
             onClick={handleDownload}
             className="flex items-center gap-2 bg-gold hover:bg-gold-light text-ink font-semibold text-sm px-4 py-2 rounded-xl transition-colors"
@@ -63,37 +82,65 @@ export default function Lightbox({ photo, photos, onClose, onNext, onPrev }) {
       </div>
 
       {/* Image area */}
-      <div className="flex-1 flex items-center justify-center relative px-16 py-8" onClick={onClose}>
+      <div
+        className="flex-1 flex items-center justify-center relative px-16 py-8"
+        onClick={onClose}
+      >
         {/* Prev button */}
         <button
-          onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onPrev();
+          }}
           className="absolute left-4 w-12 h-12 bg-white/10 hover:bg-gold/80 text-white rounded-full flex items-center justify-center text-xl transition-all hover:scale-110 z-10"
-        >‹</button>
+        >
+          ‹
+        </button>
 
         {/* Main image */}
-        <img
-          src={src}
-          alt={photo.title}
-          className="max-h-full max-w-full object-contain rounded-xl shadow-2xl animate-slideUp"
-          onClick={(e) => e.stopPropagation()}
-        />
-
+        {isVideo ? (
+          <video
+            src={src}
+            controls
+            muted
+            className="max-h-full max-w-full object-contain rounded-xl shadow-2xl animate-slideUp"
+            onClick={(e) => e.stopPropagation()}
+          />
+        ) : (
+          <img
+            src={src}
+            alt={photo.title}
+            className="max-h-full max-w-full object-contain rounded-xl shadow-2xl animate-slideUp"
+            onClick={(e) => e.stopPropagation()}
+          />
+        )}
         {/* Next button */}
         <button
-          onClick={(e) => { e.stopPropagation(); onNext(); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onNext();
+          }}
           className="absolute right-4 w-12 h-12 bg-white/10 hover:bg-gold/80 text-white rounded-full flex items-center justify-center text-xl transition-all hover:scale-110 z-10"
-        >›</button>
+        >
+          ›
+        </button>
       </div>
 
       {/* Description */}
       {photo.description && (
-        <div className="text-center pb-4 text-white/40 text-sm px-6" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="text-center pb-4 text-white/40 text-sm px-6"
+          onClick={(e) => e.stopPropagation()}
+        >
           {photo.description}
         </div>
       )}
 
       {/* Keyboard hint */}
-      <div className="text-center pb-4 text-white/20 text-xs" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="text-center pb-4 text-white/20 text-xs"
+        onClick={(e) => e.stopPropagation()}
+      >
         ← → arrow keys to navigate &nbsp;·&nbsp; ESC to close
       </div>
     </div>
