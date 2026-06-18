@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 export default function PhotoCard({ photo, onClick }) {
- const [loaded, setLoaded] = useState(false);
-const [error, setError] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
 
-const isVideo = photo.type === "video";
+  const isVideo = photo.type === "video";
 
-const src = isVideo
-  ? `${process.env.PUBLIC_URL}/videos/${photo.file}`
-  : `${process.env.PUBLIC_URL}/photos/${photo.file}`;
+  const src = isVideo
+    ? `${process.env.PUBLIC_URL}/videos/${photo.file}`
+    : `${process.env.PUBLIC_URL}/photos/${photo.file}`;
 
   const handleDownload = (e) => {
     e.stopPropagation();
@@ -42,18 +42,10 @@ const src = isVideo
       {/* Media (Image / Video) */}
       {!error &&
         (isVideo ? (
-          <video
-            src={src}
-            className={`w-full aspect-square object-cover transition-all duration-500 group-hover:scale-105 ${
-              loaded ? "opacity-100" : "opacity-0 absolute inset-0"
-            }`}
-            onLoadedData={() => setLoaded(true)}
-            onError={() => {
-              setError(true);
-              setLoaded(true);
-            }}
-            muted
-            playsInline
+          <img
+            src={`${process.env.PUBLIC_URL}/photos/video-thumbnail.jpg`}
+            alt={photo.title}
+            className="w-full aspect-square object-cover"
           />
         ) : (
           <img
